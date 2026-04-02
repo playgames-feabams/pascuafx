@@ -436,11 +436,12 @@ function buildBasket(){
   const body=BABYLON.MeshBuilder.CreateCylinder('bBody',{height:2.6,diameterTop:3.5,diameterBottom:1.9,tessellation:20},scene);
   body.parent=basketRoot; body.position.y=0; body.material=mBsk; body.receiveShadows=true;
 
-  // ── Horizontal wicker bands
+  // ── Horizontal wicker bands (flat rings around basket body)
   const bandData=[ [-1.12,2.02],[-.55,2.32],[.02,2.60],[.58,2.90],[1.10,3.20] ];
   bandData.forEach(([y,dia],i)=>{
     const b=BABYLON.MeshBuilder.CreateTorus('bnd'+i,{diameter:dia,thickness:.080,tessellation:24},scene);
-    b.rotation.x=Math.PI/2; b.position.y=y; b.parent=basketRoot; b.material=mBskD;
+    // NO rotation — torus lies flat/horizontal by default, wrapping around basket ✓
+    b.position.y=y; b.parent=basketRoot; b.material=mBskD;
   });
 
   // ── Vertical stripes
@@ -452,9 +453,9 @@ function buildBasket(){
     vs.parent=basketRoot; vs.material=mBskD;
   }
 
-  // ── Rim (thick ring at top)
+  // ── Rim (flat horizontal ring at top — no rotation)
   const rim=BABYLON.MeshBuilder.CreateTorus('bRim',{diameter:3.55,thickness:.24,tessellation:28},scene);
-  rim.rotation.x=Math.PI/2; rim.position.y=1.32; rim.parent=basketRoot; rim.material=mRim;
+  rim.position.y=1.32; rim.parent=basketRoot; rim.material=mRim;
 
   // ── Handle (vertical arch facing camera)
   const handle=BABYLON.MeshBuilder.CreateTorus('bHnd',{diameter:3.40,thickness:.22,tessellation:20},scene);
