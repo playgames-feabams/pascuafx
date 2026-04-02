@@ -457,10 +457,24 @@ function buildBasket(){
   const rim=BABYLON.MeshBuilder.CreateTorus('bRim',{diameter:3.55,thickness:.24,tessellation:28},scene);
   rim.position.y=1.32; rim.parent=basketRoot; rim.material=mRim;
 
-  // ── Handle (vertical arch facing camera)
-  const handle=BABYLON.MeshBuilder.CreateTorus('bHnd',{diameter:3.40,thickness:.22,tessellation:20},scene);
-  handle.rotation.x=Math.PI/2; // makes arch stand vertically in front-back axis
-  handle.position.y=2.40; handle.parent=basketRoot; handle.material=mBsk;
+  // ── Handle — semicircular arch using tube, ends outside basket rim
+  // archR > rim radius (1.775) → extremos quedan fuera del borde
+  const archR  = 2.05;   // radio del arco
+  const archY0 = 1.28;   // altura donde el arco se apoya (nivel del borde)
+  const archStp = 28;
+  const archPth = [];
+  for(let i=0;i<=archStp;i++){
+    const a=(i/archStp)*Math.PI;
+    archPth.push(new BABYLON.Vector3(
+      -archR*Math.cos(a),           // x: de −archR a +archR
+      archY0+archR*Math.sin(a),     // y: sube al pico y baja simétrico
+      0
+    ));
+  }
+  const handle=BABYLON.MeshBuilder.CreateTube('bHnd',{
+    path:archPth, radius:.13, tessellation:16, cap:3
+  },scene);
+  handle.parent=basketRoot; handle.material=mBsk;
 
   // ── Inner bottom (dark disc)
   const bot=BABYLON.MeshBuilder.CreateCylinder('bBot',{height:.10,diameter:1.80,tessellation:16},scene);
