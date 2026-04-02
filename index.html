@@ -256,7 +256,7 @@ html,body{width:100%;height:100%;background:var(--baseBg);overflow:hidden;font-f
      'fenix' → Casino Fenix
    Cambiá este valor según en qué plataforma deployás.
 ════════════════════════════════════════════════════ */
-const SOURCE_HTML = 'eros'; // ← 'eros' o 'fenix'
+const SOURCE_HTML = 'fenix'; // ← 'eros' o 'fenix'
 
 /* ════════════════════════════════════════════════════
    SUPABASE
@@ -280,8 +280,8 @@ const SOURCE_HTML = 'eros'; // ← 'eros' o 'fenix'
    create unique index if not exists pascua_er_fx_user_src_uq
      on pascua_er_fx (username, source_html);
 ════════════════════════════════════════════════════ */
-const SUPABASE_URL = 'https://TU_PROYECTO.supabase.co'; // ← tu URL
-const SUPABASE_KEY = 'TU_ANON_KEY';                      // ← tu anon key
+const SUPABASE_URL = 'https://seegvnuplmkkaznzywur.supabase.co'; // ← tu URL
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlZWd2bnVwbG1ra2F6bnp5d3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjMzMjMsImV4cCI6MjA4OTE5OTMyM30.cQoOUof3cDQqnXc84WyjD6gdjEW47LmUOnmLFZVHEKg';                      // ← tu anon key
 const TABLE        = 'pascua_er_fx';
 
 /* ════════════════════════════════════════════════════
