@@ -152,7 +152,7 @@ html,body{width:100%;height:100%;background:var(--baseBg);overflow:hidden;font-f
 <div id="loading">
   <div id="loadLogoSlot">
     <!-- ★ logo-loading.png ★ -->
-    <img src="logo-loading.png" alt="Logo" style="height:clamp(100px,12vw,80px)">
+    <img src="logo-loading.png" alt="Logo" style="height:clamp(48px,12vw,80px)">
   </div>
   <div id="loadBar"><div id="loadFill"></div></div>
   <div id="loadMsg">Cargando...</div>
@@ -191,7 +191,7 @@ html,body{width:100%;height:100%;background:var(--baseBg);overflow:hidden;font-f
   <header id="logoHeader">
     <div id="logoSlot">
       <!-- ★ logo-header.png ★ -->
-      <img src="logo-header.png" alt="Logo" style="height:clamp(100px,9vw,58px)">
+      <img src="logo-header.png" alt="Logo" style="height:clamp(36px,9vw,58px)">
     </div>
     <button id="muteBtn" title="Silenciar / Activar sonido">🔊</button>
   </header>
@@ -457,17 +457,17 @@ function buildBasket(){
   const rim=BABYLON.MeshBuilder.CreateTorus('bRim',{diameter:3.55,thickness:.24,tessellation:28},scene);
   rim.position.y=1.32; rim.parent=basketRoot; rim.material=mRim;
 
-  // ── Handle — semicircular arch using tube, ends outside basket rim
-  // archR > rim radius (1.775) → extremos quedan fuera del borde
-  const archR  = 2.05;   // radio del arco
-  const archY0 = 1.28;   // altura donde el arco se apoya (nivel del borde)
-  const archStp = 28;
+  // ── Handle — arch cuyos extremos caen exactamente sobre los costados del borde
+  // archR ≈ radio exterior del borde (1.775) → sin gap, sin flote
+  const archR  = 1.78;
+  const archY0 = 1.32;  // mismo nivel que el borde
+  const archStp = 30;
   const archPth = [];
   for(let i=0;i<=archStp;i++){
     const a=(i/archStp)*Math.PI;
     archPth.push(new BABYLON.Vector3(
-      -archR*Math.cos(a),           // x: de −archR a +archR
-      archY0+archR*Math.sin(a),     // y: sube al pico y baja simétrico
+      -archR*Math.cos(a),
+      archY0+archR*Math.sin(a),
       0
     ));
   }
@@ -475,6 +475,13 @@ function buildBasket(){
     path:archPth, radius:.13, tessellation:16, cap:3
   },scene);
   handle.parent=basketRoot; handle.material=mBsk;
+
+  // ── Nudos de unión — esferas donde la manija se clava en el borde
+  [-1,1].forEach((side,i)=>{
+    const knob=BABYLON.MeshBuilder.CreateSphere('hknob'+i,{diameter:.34,segments:8},scene);
+    knob.position.set(side*archR, archY0, 0);
+    knob.parent=basketRoot; knob.material=mBskD;
+  });
 
   // ── Inner bottom (dark disc)
   const bot=BABYLON.MeshBuilder.CreateCylinder('bBot',{height:.10,diameter:1.80,tessellation:16},scene);
